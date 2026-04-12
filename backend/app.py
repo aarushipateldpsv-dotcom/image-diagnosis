@@ -20,6 +20,13 @@ from utils.preprocessing import preprocess_single_image
 from security.aes_encryption import encrypt_image, decrypt_image
 from explainability.gradcam import get_gradcam_heatmap, save_gradcam_image
 
+# Custom Dense layer to handle quantization_config
+class CustomDense(tf.keras.layers.Dense):
+    def __init__(self, quantization_config=None, **kwargs):
+        # Ignore quantization_config
+        kwargs.pop('quantization_config', None)
+        super().__init__(**kwargs)
+
 # ── App Configuration ──────────────────────────────────────────
 app = Flask(
     __name__,
@@ -29,7 +36,7 @@ app.secret_key = 'your-flask-secret-key-change-in-production'
 
 UPLOAD_FOLDER   = 'encrypted_images'
 ALLOWED_EXT     = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff'}
-MODEL_PATH      = 'model/brain_tumor_model.h5'
+MODEL_PATH      = os.path.join(os.path.dirname(__file__), "..", "model", "brain_tumor_model.h5")
 LAST_CONV_LAYER = 'resnet50'   # Last conv layer in ResNet50
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -45,7 +52,7 @@ USERS = {
 
 # ── Load Model at Startup ──────────────────────────────────────
 print('Loading trained model...')
-model = tf.keras.models.load_model(MODEL_PATH)
+model = tf.keras.models.load_model(MODEL_PATH, custom_objects={'Dense': CustomDense})
 
 if not model.built:
     model.build((None, 224, 224, 3))
