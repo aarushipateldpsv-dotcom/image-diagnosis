@@ -121,29 +121,3 @@ python app.py
 
 ---
 
-## 📸 Screenshots (Add Here)
-
-* Upload Page
-* Encrypted Image Handling
-* Prediction Output
-
-
-
-## 🚀 Future Enhancements
-
-* End-to-end encrypted cloud deployment
-* Integration with hospital systems
-* Advanced encryption (hybrid cryptography)
-* Expand to multiple diseases
-
----
-
-## 📜 License
-
-For educational and research purposes only.
-
----
-
-## ⭐ Support
-
-If you found this project useful, consider giving it a ⭐ on GitHub!
